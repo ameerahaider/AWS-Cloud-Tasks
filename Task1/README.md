@@ -14,7 +14,7 @@ Upon successful execution of this project, you will have:
 - The public IP address of the EC2 instance outputted for accessing the WordPress setup page.
 
 ## Architecture Diagram
-[Architecture Diagram](./Diagrams/architectureDiagram.png)
+![alt text](ArchitectureDiagram.png)
 
 ## Project Structure
 
