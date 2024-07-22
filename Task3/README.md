@@ -132,5 +132,6 @@ Follow the steps below to set up your NGINX load balancer and backend servers.
 1. Verify Traffic Distribution
     - Open a web browser and enter the public IP address of your load balancer instance.
     - Refresh the page multiple times and observe the responses. You should see alternating responses from "Backend Server 1" and "Backend Server 2", indicating that the load balancer is distributing traffic between the two backend servers.
+  
+    ![alt text](LB-test0.png)
     ![alt text](LB-test1.png)
-    ![alt text](LB-test2.png)
