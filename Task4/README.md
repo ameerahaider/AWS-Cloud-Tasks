@@ -66,8 +66,8 @@ The ECS Service module creates an ECS task definition and service to run an Ngin
 Clone this repository to your local machine.
 
 ```sh
-git clone https://github.com/your-repo/ecs-fargate-nginx.git
-cd ecs-fargate-nginx
+git clone https://github.com/ameerahaider/Cloudelligent-Tasks.git
+cd Task4
 ```
 
 ### Configure AWS CLI
