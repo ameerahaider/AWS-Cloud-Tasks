@@ -42,13 +42,6 @@ resource "aws_security_group" "efs-sg" {
     security_groups = [aws_security_group.ecs-sg.id]
   }
 
-  ingress {
-    from_port   = 2049
-    to_port     = 2049
-    protocol    = "tcp"
-    security_groups = [aws_security_group.alb-sg.id]
-  }
-
   egress {
     from_port   = 0
     to_port     = 0

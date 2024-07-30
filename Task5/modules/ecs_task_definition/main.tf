@@ -5,8 +5,6 @@ resource "aws_ecs_task_definition" "main" {
   cpu                      = var.cpu
   memory                   = var.memory
 
-  
-  /*
   volume {
     name = "efs-volume"
 
@@ -18,11 +16,10 @@ resource "aws_ecs_task_definition" "main" {
       transit_encryption = "ENABLED"
     }
   }
-  */
 
   container_definitions = jsonencode([{
-    name      = "nginx-app"
-    image     = var.image
+    name      = "web-container"
+    image     = "ameerahaider/simple-python-server"
     essential = true
 
     portMappings = [{
@@ -30,12 +27,10 @@ resource "aws_ecs_task_definition" "main" {
       hostPort      = 80
     }]
 
-    /*
     mountPoints = [{
       sourceVolume  = "efs-volume"
-      containerPath = "/usr/share/nginx/html"
+      containerPath = "/mnt/efs"
     }]
-    */
 
   }])
 
