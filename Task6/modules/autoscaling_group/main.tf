@@ -1,9 +1,24 @@
+# Data source to get the most recent ECS AMI
+data "aws_ami" "ecs_ami" {
+  most_recent = true
+  owners      = ["amazon"]
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-ecs-hvm-*-x86_64-ebs"]
+  }
+}
+
 resource "aws_launch_template" "launch_template" {
   name_prefix            = "${var.name_prefix}-ecs-launch-template"
-  image_id               = var.ami_id
+  image_id               = data.aws_ami.ecs_ami.id
+  //image_id               = var.ami_id
   instance_type          = var.instance_type
   key_name               = var.key_name
   vpc_security_group_ids = [var.security_group_id]
+
+  iam_instance_profile {
+    name = "ecsInstanceRole"
+  }
 
   user_data = base64encode(<<-EOF
       #!/bin/bash
@@ -11,7 +26,7 @@ resource "aws_launch_template" "launch_template" {
       set -x
 
       # Update the package repository
-      sudo yum update -y
+      # sudo yum update -y
 
       # Enable ecs in Amazon Linux Extras and install ecs-init
       amazon-linux-extras enable ecs
@@ -19,13 +34,15 @@ resource "aws_launch_template" "launch_template" {
 
       # Enable and start the Docker and ECS service
       sudo systemctl start docker
-      sudo systemctl enable ecs
+      sudo systemctl start ecs
 
-       # Wait for ECS service to start
+      # Wait for ECS service to start
       sleep 15
 
       # Configure the ECS cluster
-      echo ECS_CLUSTER=Ameera-ecs-cluster | sudo tee -a /etc/ecs/ecs.config
+      echo ECS_CLUSTER=clustername >> sudo /etc/ecs/ecs.config
+      sudo systemctl start docker
+      sudo systemctl start ecs
     EOF
   )
 
@@ -47,6 +64,7 @@ resource "aws_autoscaling_group" "asg" {
   max_size                   = var.max_size
   min_size                   = var.min_size
   vpc_zone_identifier        = var.public_subnet_ids
+
   
   launch_template {
     id      = aws_launch_template.launch_template.id

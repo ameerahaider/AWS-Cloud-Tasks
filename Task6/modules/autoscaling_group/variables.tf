@@ -38,12 +38,12 @@ variable "security_group_id" {
   type        = string
 }
 
-variable "public_subnet_ids" {
-  description = "List of private subnet IDs"
-  type        = list(string)
-}
-
 variable "ecs_cluster_name" {
   description = "Name of Cluster"
   type        = string
+}
+
+variable "public_subnet_ids" {
+  description = "List of private subnet IDs"
+  type        = list(string)
 }

@@ -25,7 +25,7 @@ module "autoscaling_group" {
   key_name           = var.key_name
   min_size           = 1
   max_size           = 3
-  desired_capacity   = 2
+  desired_capacity   = 1
   security_group_id  = module.sg.ecs-sg
   public_subnet_ids = module.vpc.public_subnets
   ecs_cluster_name = "${var.name_prefix}-ecs-cluster"
