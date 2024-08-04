@@ -1,7 +1,8 @@
 # ECS EC2 with EFS using Terraform
 
 ## Table of Contents
-- [ECS EC2 with EFS using Terraform](#ECS EC2 with EFS using Terraform)
+- [ECS EC2 with EFS using Terraform](#ecs-ec2-with-efs-using-terraform)
+  - [Table of Contents](#table-of-contents)
   - [Introduction](#introduction)
   - [Prerequisites](#prerequisites)
   - [Architecture Overview](#architecture-overview)
@@ -24,7 +25,6 @@
     - [Apply Terraform Configuration](#apply-terraform-configuration)
     - [Outputs](#outputs)
     - [Cleanup](#cleanup)
-  - [Monitoring EFS Mount Status](#monitoring-efs-mount-status)
 
 ## Introduction
 
