@@ -3,7 +3,7 @@ variable "name_prefix" {
   type        = string
 }
 
-variable "cluster_id" {
+variable "ecs_cluster_id" {
   description = "ECS Cluster ID"
   type        = string
 }
@@ -13,27 +13,22 @@ variable "task_definition_arn" {
   type        = string
 }
 
-variable "desired_count" {
-  description = "Number of desired tasks"
-  type        = number
-}
-
-variable "ecs_security_group_id" {
+variable "ecs_task_sg" {
   description = "Security Group ID for ECS tasks"
   type        = string
 }
 
-variable "target_group_arn" {
-  description = "Target Group ARN"
-  type        = string
+variable "public_subnet_ids" {
+  description = "Private Subnet IDs"
+  type        = list(string)
 }
 
 variable "capacity_provider_name" {
   type        = string
 }
 
-
-variable "public_subnet_ids" {
-  description = "Public Subnet IDs"
-  type        = list(string)
+variable "alb_target_group_arn" {
+  description = "Target Group ARN"
+  type        = string
 }
+

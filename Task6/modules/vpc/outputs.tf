@@ -3,12 +3,7 @@ output "vpc_id" {
   value = aws_vpc.main.id
 }
 
-output "public_subnets" {
+output "public_subnets_id" {
   description = "The IDs of the public subnets"
   value = aws_subnet.public[*].id
-}
-
-output "internet_gateway_id" {
-  description = "The ID of the internet gateway"
-  value       = aws_internet_gateway.main.id
 }

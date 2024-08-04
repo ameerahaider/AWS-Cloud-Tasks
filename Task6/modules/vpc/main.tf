@@ -1,8 +1,8 @@
 #VPC
 resource "aws_vpc" "main" {
-
   cidr_block           = var.vpc_cidr
   enable_dns_hostnames = true
+  enable_dns_support   = true
 
   tags = {
     Name = "${var.name_prefix}-vpc"
@@ -41,6 +41,7 @@ resource "aws_route_table" "public" {
   }
 }
 
+#Subnet Association
 resource "aws_route_table_association" "public_subnet_association" {
   count          = length(aws_subnet.public)
   subnet_id      = aws_subnet.public[count.index].id

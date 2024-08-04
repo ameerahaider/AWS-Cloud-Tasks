@@ -3,22 +3,23 @@ variable "name_prefix" {
   type        = string
 }
 
-variable "cpu" {
-  description = "The number of CPU units used by the task"
+variable "ecs_task_role_arn" {
   type        = string
 }
 
-variable "memory" {
-  description = "The amount of memory (in MiB) used by the task"
+variable "ecs_exec_role_arn" {
   type        = string
 }
 
-variable "image" {
-  description = "The Docker image to use for the container"
+variable "ecr_repo_url" {
   type        = string
 }
 
-variable "region" {
-  description = "The AWS region"
+variable "cloud_watch_group_name" {
   type        = string
 }
+
+variable "efs_id" {
+  type        = string
+}
+

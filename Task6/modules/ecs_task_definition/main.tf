@@ -1,26 +1,48 @@
-resource "aws_ecs_task_definition" "main" {
-  family             = "${var.name_prefix}-task"
-  network_mode       = "awsvpc"
-  execution_role_arn = "arn:aws:iam::905418229977:role/ecsTaskExecutionRole"
-  cpu                = var.cpu
-  memory             = var.memory
+# --- ECS Task Definition ---
 
-  runtime_platform {
-    operating_system_family = "LINUX"
-    cpu_architecture        = "X86_64"
+resource "aws_ecs_task_definition" "app" {
+  family             = "${var.name_prefix}-app"
+  task_role_arn      = var.ecs_task_role_arn
+  execution_role_arn = var.ecs_exec_role_arn
+  network_mode       = "awsvpc"
+  cpu                = 256
+  memory             = 256
+
+  volume {
+    name = "efs-volume"
+
+    efs_volume_configuration {
+      file_system_id = var.efs_id
+
+      root_directory = "/"
+      
+      transit_encryption = "ENABLED"
+    }
   }
 
   container_definitions = jsonencode([{
-    name      = "web-container"
-    image     = "ameerahaider/simple-python-server:latest"
-    cpu       = 256
-    memory    = 512
-    essential = true
+    name         = "app",
+    image        = "${var.ecr_repo_url}:latest",
+    essential    = true,
+    portMappings = [{ containerPort = 80, hostPort = 80 }],
 
-    portMappings = [{
-      containerPort = 80
-      hostPort      = 80
+    mountPoints = [{
+      sourceVolume  = "efs-volume"
+      containerPath = "/mnt/efs"
+      readOnly = false
     }]
-  }])
 
+    environment = [
+      { name = "EXAMPLE", value = "example" }
+    ]
+
+    logConfiguration = {
+      logDriver = "awslogs",
+      options = {
+        "awslogs-region"        = "us-east-1",
+        "awslogs-group"         = var.cloud_watch_group_name,
+        "awslogs-stream-prefix" = "app"
+      }
+    },
+  }])
 }

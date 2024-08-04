@@ -1,86 +1,56 @@
-# Data source to get the most recent ECS AMI
-data "aws_ami" "ecs_ami" {
-  most_recent = true
-  owners      = ["amazon"]
-  filter {
-    name   = "name"
-    values = ["amzn2-ami-ecs-hvm-*-x86_64-ebs"]
-  }
+# -------- Launch Template
+data "aws_ssm_parameter" "ecs_node_ami" {
+  name = "/aws/service/ecs/optimized-ami/amazon-linux-2/recommended/image_id"
 }
 
-resource "aws_launch_template" "launch_template" {
-  name_prefix            = "${var.name_prefix}-ecs-launch-template"
-  image_id               = data.aws_ami.ecs_ami.id
-  //image_id               = var.ami_id
-  instance_type          = var.instance_type
-  key_name               = var.key_name
-  vpc_security_group_ids = [var.security_group_id]
+resource "aws_launch_template" "ecs_ec2" {
+  name            = "${var.name_prefix}-launch-template"
+  image_id               = data.aws_ssm_parameter.ecs_node_ami.value
+  instance_type          = "t2.micro"
+  vpc_security_group_ids = [var.ecs_node_sg_id]
 
-  iam_instance_profile {
-    name = "ecsInstanceRole"
-  }
+  iam_instance_profile { arn = var.ecs_node_profile_arn}
+  monitoring { enabled = true }
 
   user_data = base64encode(<<-EOF
       #!/bin/bash
-      exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
-      set -x
-
-      # Update the package repository
-      # sudo yum update -y
-
-      # Enable ecs in Amazon Linux Extras and install ecs-init
-      amazon-linux-extras enable ecs
-      sudo yum install -y ecs-init
-
-      # Enable and start the Docker and ECS service
-      sudo systemctl start docker
-      sudo systemctl start ecs
-
-      # Wait for ECS service to start
-      sleep 15
-
-      # Configure the ECS cluster
-      echo ECS_CLUSTER=clustername >> sudo /etc/ecs/ecs.config
-      sudo systemctl start docker
-      sudo systemctl start ecs
+      echo ECS_CLUSTER=${var.ecs_cluster_name} >> /etc/ecs/ecs.config;
     EOF
   )
 
-  lifecycle {
-    create_before_destroy = true
-  }
-
-  tag_specifications {
-    resource_type = "instance"
     tags = {
-      Name = "${var.name_prefix}-ecs-instance"
-    }
+    Name = "${var.name_prefix}-launch-template"
   }
 }
 
 
-resource "aws_autoscaling_group" "asg" {
-  desired_capacity           = var.desired_capacity
-  max_size                   = var.max_size
-  min_size                   = var.min_size
-  vpc_zone_identifier        = var.public_subnet_ids
+# -------- Auto Scaling Group
 
-  
+resource "aws_autoscaling_group" "ecs" {
+
+  name               = "${var.name_prefix}-ecs-asg-"
+  vpc_zone_identifier       = var.public_subnet_ids 
+  min_size                  = 2
+  max_size                  = 8
+  health_check_grace_period = 0
+  health_check_type         = "EC2"
+  protect_from_scale_in     = false
+
   launch_template {
-    id      = aws_launch_template.launch_template.id
+    id      = aws_launch_template.ecs_ec2.id
     version = "$Latest"
   }
+  
 
   tag {
     key                 = "Name"
-    value               = "${var.name_prefix}-asg-ecs-instance"
+    value               = "${var.name_prefix}-ecs-cluster"
     propagate_at_launch = true
   }
 
   tag {
     key                 = "AmazonECSManaged"
-    value               = true
+    value               = ""
     propagate_at_launch = true
   }
 }
-

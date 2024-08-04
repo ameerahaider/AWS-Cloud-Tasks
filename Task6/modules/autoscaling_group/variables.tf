@@ -3,19 +3,23 @@ variable "name_prefix" {
   type        = string
 }
 
-variable "ami_id" {
+variable "ecs_node_sg_id" {
+  description = "ID of the security group for instances"
+  type        = string
+}
+
+variable "ecs_node_profile_arn" {
   description = "ID of the AMI to use for instances"
   type        = string
 }
 
-variable "instance_type" {
-  description = "Type of EC2 instance"
+variable "ecs_cluster_name" {
   type        = string
 }
 
-variable "key_name" {
-  description = "Name of the EC2 key pair"
-  type        = string
+variable "public_subnet_ids" {
+  description = "List of private subnet IDs"
+  type        = list(string)
 }
 
 variable "min_size" {
@@ -26,24 +30,4 @@ variable "min_size" {
 variable "max_size" {
   description = "Maximum number of instances in the Auto Scaling Group"
   type        = number
-}
-
-variable "desired_capacity" {
-  description = "Desired number of instances in the Auto Scaling Group"
-  type        = number
-}
-
-variable "security_group_id" {
-  description = "ID of the security group for instances"
-  type        = string
-}
-
-variable "ecs_cluster_name" {
-  description = "Name of Cluster"
-  type        = string
-}
-
-variable "public_subnet_ids" {
-  description = "List of private subnet IDs"
-  type        = list(string)
 }

@@ -1,15 +1,17 @@
+# Capacity Provider
 resource "aws_ecs_capacity_provider" "main" {
-
   name = "${var.name_prefix}-ecs-ec2"
 
   auto_scaling_group_provider {
-    auto_scaling_group_arn         = var.auto_scaling_group_arn
+
+    auto_scaling_group_arn         = var.auto_scaling_group_arn 
+    managed_termination_protection = "DISABLED"
 
     managed_scaling {
-      maximum_scaling_step_size = 1000
+      maximum_scaling_step_size = 2
       minimum_scaling_step_size = 1
       status                    = "ENABLED"
-      target_capacity           = 1
+      target_capacity           = 100
     }
   }
 }
