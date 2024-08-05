@@ -54,6 +54,8 @@ The architecture includes the following components:
 10. **IAM Roles**: Provide necessary permissions for ECS tasks and services.
 11. **CloudWatch Logs**: Captures and stores logs from the ECS tasks for monitoring purposes.
 
+![alt text](architectureDiagram.png)
+
 ## Modules
 
 ### VPC
