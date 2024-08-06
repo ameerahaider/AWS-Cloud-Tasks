@@ -1,3 +1,3 @@
-output "service_name" {
+output "cluster_name" {
   value = aws_ecs_service.this.name
 }
