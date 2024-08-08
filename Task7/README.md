@@ -68,14 +68,14 @@ Here’s an example `buildspec.yml` file:
 
 #### 2. Create a New CodePipeline
 
-1. Access CodePipeline:
+##### 1. Access CodePipeline:
    
    You need to create a pipeline that will automate the build, test, and deployment of your application.
 
    - Go to the AWS Management Console and navigate to CodePipeline.
    - Click on Create Pipeline.
 
-2. Pipeline Settings:
+##### 2. Pipeline Settings:
    
    You need to define basic settings like the pipeline name and service role. The service role allows CodePipeline to interact with other AWS services on your behalf.
 
@@ -84,7 +84,7 @@ Here’s an example `buildspec.yml` file:
    - Click Next.
    - ![alt text](image.png)
 
-3. Source Provider: GitHub:
+##### 3. Source Provider: GitHub:
    
    CodePipeline needs to know where your source code is stored. GitHub is one of the most popular source control platforms.
 
@@ -95,7 +95,7 @@ Here’s an example `buildspec.yml` file:
    - ![alt text](image-1.png)
    - ![alt text](image-2.png)
 
-4. Build Stage: AWS CodeBuild:
+##### 4. Build Stage: AWS CodeBuild:
    
    This stage defines how your application will be built. AWS CodeBuild will execute the instructions in your buildspec.yml file to create a Docker image of your application.
 
@@ -117,7 +117,7 @@ Here’s an example `buildspec.yml` file:
      - Click Continue to CodePipeline.
      - ![alt text](image-6.png)
 
-5. Deploy Stage: Amazon ECS:
+##### 5. Deploy Stage: Amazon ECS:
    
    This stage is where your newly built Docker image is deployed to your ECS cluster. By using Amazon ECS as the deploy provider, CodePipeline will automatically update your ECS service with the new image.
 
@@ -127,12 +127,12 @@ Here’s an example `buildspec.yml` file:
    - Click Next.
    - ![alt text](image-7.png)
 
-6. Review and Create:
+##### 6. Review and Create:
    - Review your pipeline configuration.
    - Click Create Pipeline to finalize the setup.
    - ![alt text](image-8.png)
   
-7. Ensuring Proper IAM Permissions for CodeBuild to Access Amazon ECR
+##### 7. Ensuring Proper IAM Permissions for CodeBuild to Access Amazon ECR
 
    To ensure your AWS CodeBuild project can successfully authenticate with Amazon ECR and avoid permission issues, you need to update the IAM role associated with your CodeBuild project to grant it the necessary permissions. Follow these steps:
 
