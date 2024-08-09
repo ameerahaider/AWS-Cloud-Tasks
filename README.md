@@ -19,4 +19,9 @@ Set up a highly available and scalable infrastructure on Amazon ECS Fargate usin
 ## Task 6: ECS EC2 with EFS using Terraform
 Sets up an ECS cluster with EC2 instances to run an Nginx server, including an Application Load Balancer (ALB), Elastic File System (EFS) for persistent storage, and monitoring using CloudWatch Logs. The infrastructure is managed using Terraform.
 
+## Task 7: Deploying an Application on ECS EC2 using AWS CodePipeline manually 
+This guide will walk you through the process of setting up AWS CodePipeline on AWS console, for continuous integration and deployment (CI/CD) of your application which is already up and running on ECS. 
+
+## Task 8: Deploying an Application using AWS CodePipeline on ECS EC2 using Terraform
+This project sets up an ECS cluster with EC2 instances to run an application and then sets up AWS CodePipeline for continuous integration and deployment (CI/CD). The infrastructure is managed using Terraform.
 

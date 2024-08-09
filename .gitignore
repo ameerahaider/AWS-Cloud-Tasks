@@ -28,3 +28,6 @@ override.tf.json
 
 # Ignore sensitive files
 secret.tfvars
+
+# Ignore draw.io backup file
+.*.drawio.bkp

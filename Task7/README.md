@@ -1,4 +1,4 @@
-## Deploying the Application using AWS CodePipeline manually
+## Deploying an Application on ECS EC2 using AWS CodePipeline manually
 
 ### Introduction
 

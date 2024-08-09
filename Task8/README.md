@@ -1,4 +1,4 @@
-# Deploying an Application using AWS CodePipeline on ECS EC2
+# Deploying an Application using AWS CodePipeline on ECS EC2 using Terraform
 
 ## Introduction
 
