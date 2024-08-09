@@ -28,7 +28,7 @@ resource "aws_launch_template" "ecs_ec2" {
 
 resource "aws_autoscaling_group" "ecs" {
 
-  name               = "${var.name_prefix}-ecs-asg-"
+  name               = "${var.name_prefix}-ecs-asg"
   vpc_zone_identifier       = var.public_subnet_ids 
   min_size                  = 2
   max_size                  = 8

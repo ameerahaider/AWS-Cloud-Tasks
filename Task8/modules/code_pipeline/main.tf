@@ -1,6 +1,6 @@
-data "aws_secretsmanager_secret_version" "github_oauth_token" {
-  secret_id = "github-oauth-token"
-}
+//data "aws_secretsmanager_secret_version" "github_oauth_token" {
+//  secret_id = "github-oauth-token"
+//}
 
 resource "aws_codepipeline" "app_pipeline" {
   name     = "${var.name_prefix}-app-pipeline"
@@ -25,8 +25,9 @@ resource "aws_codepipeline" "app_pipeline" {
       configuration = {
         Owner      = var.repo_owner 
         Repo       = var.repo_name 
-        Branch     = var.repo_branch                                     
-        OAuthToken = jsondecode(data.aws_secretsmanager_secret_version.github_oauth_token.secret_string)["GITHUB_OAUTH_TOKEN"] 
+        Branch     = var.repo_branch      
+                OAuthToken = ""  
+        //OAuthToken = jsondecode(data.aws_secretsmanager_secret_version.github_oauth_token.secret_string)["GITHUB_OAUTH_TOKEN"] 
       }
     }
   }
