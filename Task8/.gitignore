@@ -1,0 +1,33 @@
+# Terraform files
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+*.terraform.*
+
+# Crash log files
+crash.log
+
+# Ignore any generated plan files
+*.tfplan
+
+# .terraform directories
+.terraform/
+.terraform/*
+
+# Local .terraformrc & .terraform.d directories
+terraform.rc
+.terraformrc
+.terraform.d/clea
+
+# Override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Ignore sensitive files
+secret.tfvars
+
+# Ignore draw.io backup file
+.*.drawio.bkp
