@@ -31,3 +31,5 @@ secret.tfvars
 
 # Ignore draw.io backup file
 .*.drawio.bkp
+
+node_modules/

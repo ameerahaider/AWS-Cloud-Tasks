@@ -73,6 +73,7 @@ module "ecr" {
 
 module "cloudwatch" {
   source = "./modules/cloudwatch"
+  name_prefix = "Ameera"
 }
 
 module "ecs_task_definition" {
