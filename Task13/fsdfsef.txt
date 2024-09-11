@@ -1,0 +1,191 @@
+provider "aws" {
+  region = "us-east-1"
+}
+
+# Variables
+variable "instance_type" {
+  default = "t2.micro"
+}
+
+variable "key_name" {
+  default = "my-key-pair"  # Replace with your key pair
+}
+
+# Security Group for EC2 Instances
+resource "aws_security_group" "jenkins_sg" {
+  name        = "jenkins-security-group"
+  description = "Allow SSH and HTTP access"
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+# Security Group for Application EC2
+resource "aws_security_group" "app_sg" {
+  name        = "app-security-group"
+  description = "Allow HTTP traffic"
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+# IAM Role for Jenkins EC2 Instance
+resource "aws_iam_role" "jenkins_role" {
+  name = "jenkins-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Action = "sts:AssumeRole"
+      Effect = "Allow"
+      Principal = {
+        Service = "ec2.amazonaws.com"
+      }
+    }]
+  })
+}
+
+resource "aws_iam_instance_profile" "jenkins_instance_profile" {
+  name = "jenkins-instance-profile"
+  role = aws_iam_role.jenkins_role.name
+}
+
+# IAM Policy for Jenkins Role (e.g., for S3 access)
+resource "aws_iam_policy" "jenkins_policy" {
+  name = "jenkins-policy"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject"
+        ]
+        Effect   = "Allow"
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "jenkins_role_attach" {
+  role       = aws_iam_role.jenkins_role.name
+  policy_arn = aws_iam_policy.jenkins_policy.arn
+}
+
+# EC2 Instance for Jenkins
+resource "aws_instance" "jenkins" {
+  ami           = "ami-0c55b159cbfafe1f0"  # Amazon Linux 2 AMI
+  instance_type = var.instance_type
+  key_name      = var.key_name
+  security_groups = [aws_security_group.jenkins_sg.name]
+
+  iam_instance_profile = aws_iam_instance_profile.jenkins_instance_profile.name
+
+  tags = {
+    Name = "Jenkins Server"
+  }
+
+  user_data = <<-EOF
+    #!/bin/bash
+    sudo yum update -y
+    sudo yum install -y java-1.8.0-openjdk
+    sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+    sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+    sudo yum install jenkins -y
+    sudo systemctl start jenkins
+    sudo systemctl enable jenkins
+    sudo apt install curl unzip -y
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    unzip awscliv2.zip
+    sudo ./aws/install
+    sudo apt install docker.io -y
+    sudo systemctl start docker
+    sudo usermod -aG docker $USER
+    sudo usermod -aG docker jenkins
+    sudo systemctl status docker
+  EOF
+}
+
+# EC2 Instance for Application
+resource "aws_instance" "app" {
+  ami           = "ami-0c55b159cbfafe1f0"  # Amazon Linux 2 AMI
+  instance_type = var.instance_type
+  key_name      = var.key_name
+  security_groups = [aws_security_group.app_sg.name]
+
+  tags = {
+    Name = "Application Server"
+  }
+
+  user_data = <<-EOF
+    #!/bin/bash
+    sudo yum update -y
+    sudo yum install -y httpd
+    sudo systemctl start httpd
+    sudo systemctl enable httpd
+  EOF
+}
+
+# Jenkins Pipeline Script Example
+output "jenkins_pipeline_script" {
+  value = <<-EOPIPELINE
+    pipeline {
+      agent any
+      stages {
+        stage('Clone Repository') {
+          steps {
+            git branch: 'main', url: 'https://github.com/your-username/your-repo.git'
+          }
+        }
+        stage('Build') {
+          steps {
+            sh 'echo Building the app'
+          }
+        }
+        stage('Deploy') {
+          steps {
+            sh '''
+            ssh -o StrictHostKeyChecking=no ec2-user@${aws_instance.app.public_ip} << 'EOF'
+              sudo yum update -y
+              sudo yum install git -y
+              git clone https://github.com/your-username/your-repo.git /var/www/html
+              sudo systemctl restart httpd
+            EOF
+            '''
+          }
+        }
+      }
+    }
+  EOPIPELINE
+}
