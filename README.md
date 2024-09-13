@@ -25,3 +25,23 @@ This guide will walk you through the process of setting up AWS CodePipeline on A
 ## Task 8: Deploying an Application using AWS CodePipeline on ECS EC2 using Terraform
 This project sets up an ECS cluster with EC2 instances to run an application and then sets up AWS CodePipeline for continuous integration and deployment (CI/CD). The infrastructure is managed using Terraform.
 
+## Task 9: Deploying a Simple Node.js Application on AWS Elastic Beanstalk
+This guide will walk you through the process of deploying a simple Node.js application to AWS Elastic Beanstalk using the AWS Management Console. Follow these steps to get your application up and running.
+
+## Task 10: Deploying a Node.js Application on AWS Elastic Beanstalk using Terraform
+This project automates the deployment of a Node.js application on AWS Elastic Beanstalk using Terraform. The deployment involves creating an S3 bucket to store the application bundle, setting up an Elastic Beanstalk application, and configuring an Elastic Beanstalk environment.
+
+## Task 11: Deploying a Node.js Application on AWS Elastic Beanstalk with AWS Code Pipeline using Terraform
+This project automates the deployment of a Node.js application on AWS Elastic Beanstalk using Terraform. The deployment involves creating an S3 bucket to store the artifacts, setting up an Elastic Beanstalk application, and configuring an Elastic Beanstalk environment. The project uses AWS Code Pipeline to automate the entire process.
+
+## Task 12: Jenkins Agent Setup and ECS Deployment Pipeline
+This guide explains how to set up a Jenkins agent on an AWS EC2 instance, configure AWS CLI with SSO, create the necessary AWS infrastructure, and set up a Jenkins pipeline that deploys a Dockerized application from GitHub to AWS ECS. It also includes instructions on how to trigger the Jenkins pipeline.
+
+## Task 13: Jenkins Agent Setup and ECS Deployment Pipeline using Terraform
+This guide explains how to set up a Jenkins agent on an AWS EC2 instance, configure AWS CLI with SSO, create the necessary AWS infrastructure, and set up a Jenkins pipeline that deploys a Dockerized application from GitHub to AWS ECS. It also includes instructions on how to trigger the Jenkins pipeline. The infrastructure is managed using Terraform.
+
+## Task 14: Deploying a NodeJS App on EC2 Instance Using Terraform and Scripted Jenkins Pipeline
+This guide provides detailed instructions on setting up a Jenkins agent on an AWS EC2 instance, configuring AWS CLI with SSO, creating necessary AWS infrastructure using Terraform, and setting up a Jenkins pipeline to deploy a Dockerized application from GitHub to AWS EC2. Additionally, it covers how to trigger the Jenkins pipeline.
+
+## Task 15: Terraform Workspaces
+Explanation of Terraform workspaces.

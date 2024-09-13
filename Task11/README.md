@@ -1,4 +1,4 @@
-# Deploying a Node.js Application on AWS Elastic Beanstalk using Terraform
+# Deploying a Node.js Application on AWS Elastic Beanstalk with AWS Code Pipeline using Terraform
 
 ## Introduction
 
