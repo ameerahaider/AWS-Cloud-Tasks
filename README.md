@@ -45,3 +45,6 @@ This guide provides detailed instructions on setting up a Jenkins agent on an AW
 
 ## Task 15: Terraform Workspaces
 Explanation of Terraform workspaces.
+
+## Task 16: Deploying a Simple Application on AWS EKS
+This guide provides step-by-step instructions for deploying a simple Nginx application on AWS Elastic Kubernetes Service (EKS). It includes setting up the EKS cluster, configuring `kubectl`, and deploying the application manually. Follow these steps to complete the deployment.
