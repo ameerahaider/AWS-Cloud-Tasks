@@ -1,0 +1,38 @@
+---
+  - name: Install Docker on managed nodes
+    hosts: managed_nodes
+    become: yes
+    tasks:
+      - name: Update package index
+        apt:
+          update_cache: yes
+
+      - name: Install required packages
+        apt:
+          name:
+            - apt-transport-https
+            - ca-certificates
+            - curl
+            - software-properties-common
+          state: present
+
+      - name: Add Docker's official GPG key
+        apt_key:
+          url: https://download.docker.com/linux/ubuntu/gpg
+          state: present
+
+      - name: Set up the stable repository
+        apt_repository:
+          repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable"
+          state: present
+
+      - name: Install Docker
+        apt:
+          name: docker-ce
+          state: latest
+
+      - name: Ensure Docker is running
+        service:
+          name: docker
+          state: started
+          enabled: yes

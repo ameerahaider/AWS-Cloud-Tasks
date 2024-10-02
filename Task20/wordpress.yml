@@ -1,0 +1,50 @@
+---
+  - name: Deploy WordPress and MySQL containers
+    hosts: managed_nodes
+    become: true
+    vars_prompt:
+      - name: db_password
+        prompt: "Enter MySQL root password"
+        private: yes
+      - name: wp_db_user
+        prompt: "Enter WordPress database username"
+        private: no
+      - name: wp_db_password
+        prompt: "Enter WordPress database password"
+        private: yes
+
+    tasks:
+      - name: Create a Docker network
+        docker_network:
+          name: wordpress-net
+          state: present
+
+      - name: Deploy MySQL container
+        docker_container:
+          name: mysql
+          image: mysql:latest
+          env:
+            MYSQL_ROOT_PASSWORD: "{{ db_password }}"
+            MYSQL_DATABASE: wordpress
+            MYSQL_USER: "{{ wp_db_user }}"
+            MYSQL_PASSWORD: "{{ wp_db_password }}"
+          networks:
+            - name: wordpress-net
+          state: started
+          recreate: true
+
+      - name: Deploy WordPress container
+        docker_container:
+          name: wordpress
+          image: wordpress
+          env:
+            WORDPRESS_DB_NAME: wordpress
+            WORDPRESS_DB_HOST: "mysql"
+            WORDPRESS_DB_USER: "{{ wp_db_user }}"
+            WORDPRESS_DB_PASSWORD: "{{ wp_db_password }}"
+          networks:
+            - name: wordpress-net
+          ports:
+            - "80:80"
+          state: started
+          recreate: true

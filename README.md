@@ -48,3 +48,15 @@ Explanation of Terraform workspaces.
 
 ## Task 16: Deploying a Simple Application on AWS EKS
 This guide provides step-by-step instructions for deploying a simple Nginx application on AWS Elastic Kubernetes Service (EKS). It includes setting up the EKS cluster, configuring `kubectl`, and deploying the application manually. Follow these steps to complete the deployment.
+
+## Task 17: EKS Cluster Deployment with Terraform and Kubernetes
+This guide provides a detailed step-by-step process for deploying an Amazon EKS (Elastic Kubernetes Service) cluster using Terraform, and configuring Kubernetes resources like deployments and services. This README includes information on Terraform modules used, Kubernetes resources, and how to deploy and destroy the infrastructure.
+
+## Task 18: Observibility, Prometheus and Grafana
+Researched on Observibility, Prometheus and Grafana and documented it.
+
+## Task 19: Monitoring EC2 Instances with Prometheus and Grafana
+This tutorial guides you through installing Prometheus and Grafana on a Windows machine to monitor an EC2 instance running a simple application (e.g., Nginx) and collect metrics using Node Exporter.
+
+## Task 20: Cloud Deployment with Ansible: Deploying WordPress with MySQL and Docker
+In this project, we will deploy a small cloud infrastructure using AWS EC2 instances and manage it using Ansible. The objective is to deploy virtual machines (VMs) in the cloud, configure Ansible for automation, and run playbooks to install Docker and deploy WordPress using a dynamic inventory setup.
