@@ -21,10 +21,12 @@ This guide explains how to set up a site-to-site VPN between an AWS VPC and an U
    **Subnet Name**: `PublicSubnet`  
    **Subnet CIDR Block**: `10.0.1.0/24`
 
+![alt text]({02F5F988-2397-41D2-BBA8-EE55ED69D4F4}.png)
+
 3. **Launch the VPC**  
    Click **Create VPC**.
 
-![alt text](image-7.png)
+![alt text]({0DFD0039-49D1-41EB-A58E-E2AD1BB132E2}.png)
 
 ---
 
@@ -37,15 +39,14 @@ A Customer Gateway (CGW) represents the external device (your Ubuntu server) tha
 
    - **Name**: `UbuntuCGW`
    - **Routing**: Static
-   - **IP Address**: Use the public IP of your Ubuntu machine. To get this, go to `whatsmyipaddress.com`.
+   - **IP Address**: Use the public IP of your Ubuntu machine. To get this, go to `www.whatismypublicip.com`.
 
-     ![alt text](image-8.png)
+   ![alt text]({D3F40A18-48FF-46D2-8D8B-E0F54D1316EF}.png)
 
    - **BGP ASN**: Leave as default.
 
 3. Click **Create Customer Gateway**.
-![alt text](image-9.png)
-
+![alt text]({FC6C45D1-5939-4419-802C-718473D7150A}.png)
 ---
 
 ## Step 3: Create a Virtual Private Gateway (VGW)
@@ -55,10 +56,10 @@ A Virtual Private Gateway (VGW) is a VPN concentrator on the AWS side of the con
 2. **Name**: `MyVGW`  
    **ASN**: Leave default.
 3. Click **Create Virtual Private Gateway**.
-
+![alt text]({C41630C1-C3EA-48F8-8CC5-D132B64BCA98}.png)
 4. **Attach the VGW to the VPC**:
    - Go to **Actions** > **Attach to VPC** > Select `MyVPC`.
-
+![alt text]({C15C12F9-608F-4EBB-AB45-C54A2EFCF30E}.png)
 ---
 
 ## Step 4: Create a VPN Connection
@@ -72,13 +73,19 @@ The VPN connection represents the encrypted tunnel between the AWS VPC and your 
    - **Target Gateway**: Select the Virtual Private Gateway (VGW) created earlier.
    - **Customer Gateway**: Select the Customer Gateway (CGW) you created.
    - **Routing**: Static.
-   - **Static IP Prefixes**: Enter the private IP range of your Ubuntu machine (for example, `192.168.1.0/24`).
+   - **Static IP Prefixes**: Enter the private IP CIDR of your Ubuntu machine (run `hostname -I` on terminal on local machine).
+   ![alt text]({37E4D220-61D8-4C6A-B375-E4989DB5FE82}.png)
+   - **Local IPv4 network CIDR**: Enter the private IP CIDR of your Ubuntu machine.
+   - **Remote IPv4 network CIDR**: Enter the private IP CIDR of your vpc.
 
 3. Click **Create VPN Connection**.
+
+![alt text]({31480EDC-56C1-4F48-9499-A6584675519A}.png)
 
 4. **Download VPN Configuration**:  
    Once the VPN connection is created, download the VPN configuration for StrongSwan from AWS. You will use this file to configure your Ubuntu machine.
 
+![alt text]({4F2980A7-FFDE-4716-85CD-663C00308D90}.png)
 ---
 
 ## Step 5: Update Route Tables
@@ -94,6 +101,7 @@ Route propagation allows the VGW to propagate routes back to your on-premise Ubu
 
 4. Save the changes.
 
+![alt text]({8470A117-2835-4097-AFAA-186BE58D97DE}.png)
 ---
 
 ## Step 6: Install and Configure StrongSwan on Ubuntu
@@ -114,6 +122,7 @@ sudo apt install strongswan strongswan-pki libcharon-extra-plugins libcharon-ext
 #### Step 1: Generate IPsec Private Key
 
 ```bash
+sudo su
 sudo ipsec pki --gen --size 4096 --type rsa --outform pem > /etc/ipsec.d/private/ca.key.pem
 ```
 
@@ -137,19 +146,16 @@ sudo ipsec pki --pub --in /etc/ipsec.d/private/server.key.pem --type rsa | sudo 
 
 ### Configure StrongSwan Using AWS Configuration
 
-1. **Upload the Configuration File**:  
-   Use `scp` to transfer the AWS VPN configuration file to your Ubuntu machine.
+1. **Edit `/etc/ipsec.conf`**:  
+   Edit the contents of your `/etc/ipsec.conf` file with the steps from the downloaded AWS VPN configuration.
 
-2. **Edit `/etc/ipsec.conf`**:  
-   Replace the contents of your `/etc/ipsec.conf` file with the values from the downloaded AWS VPN configuration.
-
-3. **Edit `/etc/ipsec.secrets`**:  
+2. **Edit `/etc/ipsec.secrets`**:  
    Similarly, update your `/etc/ipsec.secrets` file with the credentials and secrets provided in the AWS VPN configuration.
 
-4. **Restart StrongSwan**:
+3. **Restart StrongSwan**:
 
 ```bash
-sudo systemctl restart strongswan
+sudo systemctl restart ipsec
 ```
 ---
 
@@ -164,22 +170,12 @@ This verifies that the VPN tunnel between the AWS VPC and the Ubuntu machine is 
      sudo ipsec status
      ```
    - Ensure that the connection is established and active.
+   ![alt text]({5A3ED856-80F2-4F49-A3D5-87AE05A5CADB}.png)
 
 2. **On AWS**:
    - Go to **VPN Connections** in the AWS console.
    - Check the **Tunnel Status** and ensure that at least one tunnel is up.
-
----
-
-## Step 8: Test Connectivity
-This ensures that the site-to-site VPN is working correctly and that both networks can communicate securely.
-
-1. **Ping Ubuntu Machine**:  
-   From an instance inside your AWS VPC, try to ping the private IP of your Ubuntu machine.
-
-2. **Ping AWS Instance**:  
-   From your Ubuntu machine, try to ping the private IP of an instance in your AWS VPC.
-
+![alt text]({3EE80EDA-0E87-427F-95CA-CBFE57AA91CD}.png)
 ---
 
 ## Conclusion

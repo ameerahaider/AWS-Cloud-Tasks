@@ -60,3 +60,9 @@ This tutorial guides you through installing Prometheus and Grafana on a Windows 
 
 ## Task 20: Cloud Deployment with Ansible: Deploying WordPress with MySQL and Docker
 In this project, we will deploy a small cloud infrastructure using AWS EC2 instances and manage it using Ansible. The objective is to deploy virtual machines (VMs) in the cloud, configure Ansible for automation, and run playbooks to install Docker and deploy WordPress using a dynamic inventory setup.
+
+## Task 21: Site-to-Site VPN Setup Between AWS VPC and Ubuntu Machine
+This guide explains how to set up a site-to-site VPN between an AWS VPC and an Ubuntu 20.04 machine using StrongSwan. The steps include creating a VPC on AWS, configuring the VPN connection, and setting up StrongSwan on Ubuntu.
+
+## Task 22: AWS Client VPN and Active Directory Overview
+researched on AWS Client VPN and Active Directory.
