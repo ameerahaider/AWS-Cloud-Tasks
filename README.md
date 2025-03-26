@@ -1,4 +1,4 @@
-# Cloudelligent-Tasks
+# AWS-Cloud-Tasks
 
 ## Task 1: AWS EC2 WordPress Deployment with Terraform
 Provisioned an EC2 instance on AWS using Terraform, installed WordPress, set up a MySQL database on the instance, and configured WordPress to use that MySQL database. This setup utilized a user data script for automation.
